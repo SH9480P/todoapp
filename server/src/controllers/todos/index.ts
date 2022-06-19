@@ -1,10 +1,8 @@
 import {Response, Request} from "express"
-import { InsertOrUpdateOptions } from "typeorm/query-builder/InsertOrUpdateOptions"
 import {AppDataSource} from "../../app"
 import { Todo } from "../../entity/Todo"
-import {ITodo} from "../../types/todo"
 
-const getTodos = async (req: Request, res: Response) => {
+const getTodos = async (req: Request, res: Response):Promise<void> => {
     try {
         const todoRepository = AppDataSource.getRepository(Todo)
         const allTodos = await todoRepository.find()
@@ -18,9 +16,9 @@ const getTodos = async (req: Request, res: Response) => {
 
 const addTodos = async (req: Request, res: Response):Promise<void> => {
     try {
-        const body = req.body as Pick<ITodo, "name" | "description" | "status">
+        const body = req.body as Pick<Todo, "name" | "description" | "status">
         const todoRepository = AppDataSource.getRepository(Todo)
-        const todo: ITodo = new Todo()
+        const todo: Todo = new Todo()
 
         todo.name = body.name
         todo.description = body.description
@@ -75,8 +73,7 @@ const deleteTodos = async (req: Request, res: Response):Promise<void> => {
             todos: allTodos,
         })
     } catch (error) {
-        console.log(error);
-        
+        throw error
     }
 }
 
