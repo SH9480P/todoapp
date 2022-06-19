@@ -12,8 +12,8 @@ const App: React.FC = () => {
 
   const fetchTodos = (): void => {
     getTodos()
-    .then(({ data: { todos } }: ITodo[] | any) => setTodos(todos))
-    .catch((err: Error) => console.log(err))
+      .then(({ data: { todos } }: ITodo[] | any) => setTodos(todos))
+      .catch((err: Error) => console.log(err))
   }
 
  const handleSaveTodo = (e: React.FormEvent, formData: ITodo): void => {
@@ -21,12 +21,7 @@ const App: React.FC = () => {
    addTodo(formData)
    .then(({ status, data }) => {
     if (status !== 201) {
-      try {
-        throw new Error('Error! Todo not saved')
-      } catch (error) {
-        console.log(error);
-        
-      }
+      throw new Error('Error! Todo not saved')
     }
     setTodos(data.todos)
   })
@@ -59,7 +54,7 @@ const App: React.FC = () => {
     <main className='App'>
       <h1>My Todos</h1>
       <AddTodo saveTodo={handleSaveTodo} />
-      {todos && todos.map((todo: ITodo) => (
+      {todos?.map((todo: ITodo) => (
         <TodoItem
           key={todo.id}
           updateTodo={handleUpdateTodo}
